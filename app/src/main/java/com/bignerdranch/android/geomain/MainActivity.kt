@@ -2,6 +2,7 @@ package com.bignerdranch.android.geomain
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -24,6 +25,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate(Bundle?) called")
+        if (savedInstanceState != null) {
+            currentIndex = savedInstanceState.getInt("saveIndex", 0)
+        }
         setContentView(R.layout.activity_main)
         trueButton = findViewById(R.id.true_button)
         trueButton.setOnClickListener { view: View ->
@@ -58,15 +62,12 @@ class MainActivity : AppCompatActivity() {
     }
     override fun onStop() {
         super.onStop()
-        Log.d(TAG,
-            "onStop() called")
+        Log.d(TAG,"onStop() called")
     }
     override fun onDestroy() {
         super.onDestroy()
-        Log.d(TAG,
-            "onDestroy() called")
+        Log.d(TAG,"onDestroy() called")
     }
-
     private fun updateQuestion() {
         val questionTextResId = questionBank[currentIndex].textResId
         questionTextView.setText(questionTextResId)
@@ -81,5 +82,11 @@ class MainActivity : AppCompatActivity() {
         }
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT)
             .show()
+    }
+
+    override fun onSaveInstanceState(savedInstanceState: Bundle) {
+        super.onSaveInstanceState(savedInstanceState)
+        Log.d(TAG,"onSaveInstanceState() called")
+        savedInstanceState.putInt("saveIndex", currentIndex)
     }
 }
