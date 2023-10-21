@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var trueButton: Button
     private lateinit var falseButton: Button
     private lateinit var nextButton: Button
+    private lateinit var cheatButton: Button
     private lateinit var questionTextView: TextView
     private val quizViewModel: QuizViewModel by
     lazy {
@@ -43,11 +44,15 @@ class MainActivity : AppCompatActivity() {
             checkAnswer(false)
         }
         nextButton = findViewById(R.id.next_button)
+        cheatButton = findViewById(R.id.cheat_button)
         nextButton.visibility = View.INVISIBLE
         questionTextView = findViewById(R.id.question_text_view)
         nextButton.setOnClickListener {
             quizViewModel.moveToNext()
             updateQuestion()
+        }
+        cheatButton.setOnClickListener {
+
         }
         updateQuestion()
 
