@@ -3,16 +3,22 @@ package com.bignerdranch.android.geomain
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+
 const val EXTRA_ANSWER_SHOWN = "com.bignerdranch.android.geomain.answer_shown"
 private const val EXTRA_ANSWER_IS_TRUE = "com.bignerdranch.android.geomain.answer_is_true"
 
 class CheatActivity : AppCompatActivity() {
     private lateinit var answerTextView: TextView
     private lateinit var showAnswerButton: Button
+    private lateinit var version: TextView
     private var answerIsTrue = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +34,8 @@ class CheatActivity : AppCompatActivity() {
             answerTextView.setText(answerText)
             setAnswerShownResult(true)
         }
+        version = findViewById(R.id.version_text)
+        version.setText("API level " + Build.VERSION.SDK)
     }
     private fun setAnswerShownResult(isAnswerShown: Boolean) {
         val data = Intent().apply {
