@@ -8,6 +8,7 @@ class QuizViewModel : ViewModel() {
     var currentIndex = 0
     var correctChek = 0
     var isCheater = false
+    var currentCheater = 0
     val questionBank = listOf(
         Question(R.string.question_australia, true),
         Question(R.string.question_oceans, true),
@@ -24,6 +25,10 @@ class QuizViewModel : ViewModel() {
     fun correctUpdate()
     {
         correctChek++
+    }
+    fun cheaterUpdate()
+    {
+        currentCheater++
     }
 
 }
