@@ -18,7 +18,6 @@ import androidx.lifecycle.ViewModelProviders
 private const val TAG = "MainActivity"
 private const val KEY_INDEX1 = "currentIndex"
 private const val KEY_INDEX2 = "correctChek"
-private const val KEY_INDEX3 = "isCheat"
 private const val KEY_INDEX4 = "currentCheater"
 private const val REQUEST_CODE_CHEAT = 0
 
@@ -28,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var nextButton: Button
     private lateinit var cheatButton: Button
     private lateinit var questionTextView: TextView
+    private lateinit var currentCheat: TextView
     private val quizViewModel: QuizViewModel by
     lazy {
         ViewModelProviders.of(this)[QuizViewModel::class.java]
@@ -40,22 +40,28 @@ class MainActivity : AppCompatActivity() {
         quizViewModel.currentIndex = currentIndex
         val correctChek = savedInstanceState?.getInt(KEY_INDEX2, 0) ?: 0
         quizViewModel.correctChek = correctChek
-        trueButton = findViewById(R.id.true_button)
-        trueButton.setOnClickListener { view: View ->
-            checkAnswer(true)
-        }
-        falseButton = findViewById(R.id.false_button)
-        falseButton.setOnClickListener { view: View ->
-            checkAnswer(false)
-        }
-        nextButton = findViewById(R.id.next_button)
-        cheatButton = findViewById(R.id.cheat_button)
-        nextButton.visibility = View.INVISIBLE
+        val currentCheater = savedInstanceState?.getInt(KEY_INDEX4, 0) ?: 0
+        quizViewModel.currentCheater = currentCheater
+
         questionTextView = findViewById(R.id.question_text_view)
+
+        nextButton = findViewById(R.id.next_button)
         nextButton.setOnClickListener {
             quizViewModel.moveToNext()
             updateQuestion()
         }
+
+        trueButton = findViewById(R.id.true_button)
+        trueButton.setOnClickListener { view: View ->
+            checkAnswer(true)
+        }
+
+        falseButton = findViewById(R.id.false_button)
+        falseButton.setOnClickListener { view: View ->
+            checkAnswer(false)
+        }
+
+        cheatButton = findViewById(R.id.cheat_button)
         cheatButton.setOnClickListener {
             if (quizViewModel.currentCheater < 3)
             {
@@ -64,8 +70,16 @@ class MainActivity : AppCompatActivity() {
                 startActivityForResult(intent, REQUEST_CODE_CHEAT)
                 quizViewModel.cheaterUpdate()
             }
-            R.string.judgment_toast
+            else {
+                Toast.makeText(this, R.string.judgment_toast, Toast.LENGTH_SHORT).show()
+            }
+            cheatButton.visibility = View.INVISIBLE
         }
+
+        currentCheat = findViewById(R.id.current_cheat)
+        val str = "У вас осталось" + (3-quizViewModel.currentCheater) + "подсказок из 3"
+        currentCheat.setText(str)
+
         updateQuestion()
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
@@ -102,7 +116,6 @@ class MainActivity : AppCompatActivity() {
         Log.i(TAG, "onSaveInstanceState")
         savedInstanceState.putInt(KEY_INDEX1, quizViewModel.currentIndex)
         savedInstanceState.putInt(KEY_INDEX2, quizViewModel.correctChek)
-        savedInstanceState.putBoolean(KEY_INDEX3, quizViewModel.isCheater)
         savedInstanceState.putInt(KEY_INDEX4, quizViewModel.currentCheater)
     }
 
@@ -120,9 +133,10 @@ class MainActivity : AppCompatActivity() {
         nextButton.visibility = View.INVISIBLE
         trueButton.visibility = View.VISIBLE
         falseButton.visibility = View.VISIBLE
-        if (quizViewModel.currentCheater < 3)
-            cheatButton.visibility = View.VISIBLE
+        cheatButton.visibility = View.VISIBLE
         quizViewModel.isCheater = false
+        val str = "У вас осталось " + (3-quizViewModel.currentCheater) + " подсказок из 3"
+        currentCheat.setText(str)
     }
     private fun checkAnswer(userAnswer: Boolean) {
         nextButton.visibility = View.VISIBLE

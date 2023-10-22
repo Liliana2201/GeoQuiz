@@ -17,7 +17,7 @@ private const val EXTRA_ANSWER_IS_TRUE = "com.bignerdranch.android.geomain.answe
 
 class CheatActivity : AppCompatActivity() {
     private lateinit var answerTextView: TextView
-    private lateinit var showAnswerButton: Button
+    private lateinit var back: Button
     private lateinit var version: TextView
     private var answerIsTrue = false
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,17 +25,19 @@ class CheatActivity : AppCompatActivity() {
         setContentView(R.layout.activity_cheat)
         answerIsTrue = intent.getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false)
         answerTextView = findViewById(R.id.answer_text_view)
-        showAnswerButton = findViewById(R.id.show_answer_button)
-        showAnswerButton.setOnClickListener {
-            val answerText = when {
-                answerIsTrue -> R.string.true_button
-                else -> R.string.false_button
-            }
-            answerTextView.setText(answerText)
-            setAnswerShownResult(true)
+        val answerText = when {
+            answerIsTrue -> R.string.true_button
+            else -> R.string.false_button
+        }
+        answerTextView.setText(answerText)
+        setAnswerShownResult(true)
+        back = findViewById(R.id.back)
+        back.setOnClickListener {
+            finish()
         }
         version = findViewById(R.id.version_text)
-        version.setText("API level " + Build.VERSION.SDK)
+        val str = "API level " + Build.VERSION.SDK
+        version.setText(str)
     }
     private fun setAnswerShownResult(isAnswerShown: Boolean) {
         val data = Intent().apply {
