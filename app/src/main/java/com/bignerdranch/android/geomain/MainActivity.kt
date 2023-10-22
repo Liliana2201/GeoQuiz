@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.bignerdranch.android.geomain
 
 import android.app.Activity
@@ -12,7 +14,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 
 private const val TAG = "MainActivity"
@@ -52,13 +53,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         trueButton = findViewById(R.id.true_button)
-        trueButton.setOnClickListener { view: View ->
-            checkAnswer(true)
+        trueButton.setOnClickListener {
+                view: View -> checkAnswer(true)
         }
 
         falseButton = findViewById(R.id.false_button)
-        falseButton.setOnClickListener { view: View ->
-            checkAnswer(false)
+        falseButton.setOnClickListener {
+                view: View -> checkAnswer(false)
         }
 
         cheatButton = findViewById(R.id.cheat_button)
@@ -82,6 +83,7 @@ class MainActivity : AppCompatActivity() {
 
         updateQuestion()
     }
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
     {
         super.onActivityResult(requestCode, resultCode, data)
